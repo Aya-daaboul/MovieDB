@@ -8,6 +8,18 @@ app.get('*', (req, res) => {
     res.send('ok');
 });
 
+app.get('/test', (req, res) => {
+    const currentTime = new Date();
+    const hours = currentTime.getHours();
+    const minutes = currentTime.getMinutes();
+    const seconds = currentTime.getSeconds();
+    formattedTime=hours+':'+minutes+':'+seconds;
+    res.json({
+        status: 200,
+        message: formattedTime
+    });
+});
+
 app.listen(port, () => {
     console.log(`Server is listening on port`+port);
 });
