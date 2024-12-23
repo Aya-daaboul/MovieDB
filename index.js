@@ -31,13 +31,14 @@ app.get('/time', (req, res) => {
     const hours = currentTime.getHours();
     const minutes = currentTime.getMinutes();
     const seconds = currentTime.getSeconds();
-    formattedTime=hours+':'+minutes+':'+seconds;
+    finalTime=hours+':'+minutes+':'+seconds;
     res.json({
         status: 200,
-        message: formattedTime
+        message: finalTime
     });
 });
 
+//step 4
 app.get('/hello/ID', (req, res) => {
     const id = req.params.ID;
     if(id){
@@ -52,7 +53,7 @@ app.get('/hello/ID', (req, res) => {
         });
     }
 });
-
+//step 4
 app.get('/search', (req, res) => {
     const search = req.query.s;
     if (search) { // If 's' query is provided
@@ -69,7 +70,7 @@ app.get('/search', (req, res) => {
         });
     }
 });
-
+//crud read section
 app.get('/movies/read', (req, res) => {
     res.json({
         status: 200,
@@ -89,7 +90,7 @@ app.get('/movies/read/by-date', (req, res) => {
 app.get('/movies/read/by-rating', (req, res) => {
     res.json({
         status: 200,
-        data: movies.sort((a, b) => b.rating - a.rating)
+        data: movies.sort((a, b) => b.rating - a.rating) 
     });
 
 });
@@ -101,7 +102,25 @@ app.get('/movies/read/by-title', (req, res) => {
     });
 
 });
+//step 7
+res.get('/movies/read/id/:id', (req, res) => {
+    id=req.params.id;
+    if(id){
+        res.json({
+            status: 200,
+            data: movies[id]
+        });
+    }
+    else{
+        res.json({
+        status: 404,
+        error: true,
+        message: 'the movie '+id+' does not exist'
+        });
+    }
+});
 
+//create section step 8
 app.post('/movies/add', (req, res) => {
     const title = req.body.title;
     const year = req.body.year;
@@ -142,21 +161,20 @@ app.put('/movies/update', (req, res) => {
 
 });
 
-app.delete('/movies/delete', (req, res) => {
-    id=req.params.id;
-    if(!id){
-        res.json{
-            status:404,
-            error:true,
-            message:'please provide an id'
-        }
+// app.delete('/movies/delete', (req, res) => {
+//     id=req.params.id;
+//     if(!id){
+//         res.json{
+//             status:404,
+//             error:true,
+//             message:'please provide an id'
+//         }
+//     }
+//     else{
 
-    }
-    else{
-
-        movies.push();
-    }
-});
+//         movies.push();
+//     }
+// });
 
 app.listen(port, () => {
     console.log(`Server is listening on port`+port);
