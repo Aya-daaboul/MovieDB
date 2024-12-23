@@ -157,24 +157,56 @@ app.post('/movies/add', (req, res) => {
     }
 });
 
-app.put('/movies/update', (req, res) => {
 
+app.delete('/movies/delete', (req, res) => {
+    id=req.params.id;
+    if(!id){
+        res.json({
+            status: 404,
+            error: true,
+            message: 'please provide an id'
+        });
+    }
+    else{
+        movies.pop(movie[id]);
+    }
 });
 
-// app.delete('/movies/delete', (req, res) => {
-//     id=req.params.id;
-//     if(!id){
-//         res.json{
-//             status:404,
-//             error:true,
-//             message:'please provide an id'
-//         }
-//     }
-//     else{
+app.put('/movies/update', (req, res) => {
+    const newTitle = req.body.title;
+    const newRating =req.body.year;
+    const id = req.params.id;
+    if(!newTitle && !newRating){
+        res.json({
+            status: 403,
+            error: true,
+            message: 'you cannot update a movie without providing a title or rating'
+        });
+    }
+    else if(isNaN(newRating) || !newRating || newRating<0 || newRating>10){
+        res.json({
+            status: 403,
+            error: true,
+            message: 'please provide a correct rating'
+        });
+    }
+    else if(!newTitle){
+        res.json({
+            status: 403,
+            error: true,
+            message: 'please provide a title'
+        });
+    }
+    else{
+        movie[id].title=newTitle;
+        movie[id].rating=newRating;
+        res.json({
+            status: 200,
+            data: movies
+        });
+    }
 
-//         movies.push();
-//     }
-// });
+});
 
 app.listen(port, () => {
     console.log(`Server is listening on port`+port);
