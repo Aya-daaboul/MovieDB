@@ -70,18 +70,6 @@ app.get('/search', (req, res) => {
     }
 });
 
-app.post('/movies/create', (req, res) => {
-    const movie=req.body;
-    movies.push(movie);
-    res.json({
-        status: 200,
-        message: 'Movie has been added',
-        data: movie
-    });
-
-
-});
-
 app.get('/movies/read', (req, res) => {
     res.json({
         status: 200,
@@ -89,12 +77,85 @@ app.get('/movies/read', (req, res) => {
     });
 
 });
+//search section
+app.get('/movies/read/by-date', (req, res) => {
+    res.json({
+        status: 200,
+        data: movies.sort((a, b) => a.year - b.year)
+    });
+
+});
+
+app.get('/movies/read/by-rating', (req, res) => {
+    res.json({
+        status: 200,
+        data: movies.sort((a, b) => b.rating - a.rating)
+    });
+
+});
+
+app.get('/movies/read/by-title', (req, res) => {
+    res.json({
+        status: 200,
+        data: movies.sort((a, b) => a.title.localeCompare(b.title))
+    });
+
+});
+
+app.post('/movies/add', (req, res) => {
+    const title = req.body.title;
+    const year = req.body.year;
+    const rating = req.body.rating;
+    const newmovie={title: title, year: year, rating: rating};
+    if( isNaN(year) || year.length != 4 || !year){
+        res.json({
+            status: 403,
+            error: true,
+            message: 'you cannot create a movie without providing a correct year'
+        });
+    }
+    else if(!title){
+        res.json({
+        status: 403,
+        error: true,
+        message: 'No title provided'
+    });
+    }
+    else if(rating<0||rating>10||!rating){
+        movies.push(newmovie);
+        res.json({
+        status: 200,
+        rating:4,
+        data:movies
+    });
+    } 
+    else {
+        movies.push(newmovie);
+        res.json({
+            status: 200,
+            data: movies
+        });
+    }
+});
 
 app.put('/movies/update', (req, res) => {
-    
+
 });
 
 app.delete('/movies/delete', (req, res) => {
+    id=req.params.id;
+    if(!id){
+        res.json{
+            status:404,
+            error:true,
+            message:'please provide an id'
+        }
+
+    }
+    else{
+
+        movies.push();
+    }
 });
 
 app.listen(port, () => {
